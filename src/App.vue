@@ -1,17 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="main-container">
+      <AuthLogin v-if="!isLoggedIn" @loggedIn="changeLoginState($event)" />
+      <MainView v-else />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AuthLogin from "./components/AuthLogin.vue";
+import MainView from "./components/MainView.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    AuthLogin,
+    MainView,
+  },
+  data: function () {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  mounted() {
+    const token = this.$cookies.get("token");
+    if (token) {
+      this.isLoggedIn = true;
+    }
+  },
+  methods: {
+    changeLoginState(status) {
+      this.isLoggedIn = status;
+    },
+  },
+};
 </script>
 
 <style>
@@ -21,6 +41,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
+}
+.main-container {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 </style>
